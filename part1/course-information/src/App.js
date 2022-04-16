@@ -2,8 +2,8 @@ const Header = (props) => {
   return <p>{props.course}</p>;
 };
 
-const Part = (props) => {
-  let { name, exercises } = props.part;
+const Part = ({ part }) => {
+  let { name, exercises } = part;
   return (
     <p>
       {name} {exercises}
@@ -11,12 +11,12 @@ const Part = (props) => {
   );
 };
 
-const Content = (props) => {
+const Content = ({ parts }) => {
   return (
     <div>
-      <Part part={props.parts[0]} />
-      <Part part={props.parts[1]} />
-      <Part part={props.parts[2]} />
+      <Part part={parts[0]} />
+      <Part part={parts[1]} />
+      <Part part={parts[2]} />
     </div>
   );
 };
