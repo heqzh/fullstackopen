@@ -1,5 +1,5 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
+import phonebookServices from "../services/phonebookServices";
 
 export const PersonForm = ({ persons, setPersons }) => {
   const [newName, setNewName] = useState("");
@@ -20,12 +20,34 @@ export const PersonForm = ({ persons, setPersons }) => {
       let isDuplicate = persons.some(
         (person) => person.name.toLowerCase() === lowerCaseName
       );
-      if (isDuplicate) return alert(`${newName} is already added to phonebook`);
-
-      setPersons([
-        ...persons,
-        { name: newName, number: newNumber, id: Date.now() },
-      ]);
+      if (isDuplicate) {
+        let update = window.confirm(
+          `${newName} is already added to phonebook, replace the old number with a new one?`
+        );
+        if (!update) return;
+        // Find the person's id
+        let match = persons.find(
+          (person) => person.name.toLowerCase() === lowerCaseName
+        );
+        let updatedPerson = { ...match, number: newNumber };
+        // PUT request an updated entry to the backend
+        phonebookServices
+          .update(match.id, updatedPerson)
+          .then((updatedEntry) => {
+            // Returns a response of the updated entry object
+            // Update the frontend
+            setPersons(
+              persons.map((person) =>
+                person.id !== updatedEntry.id ? person : updatedEntry
+              )
+            );
+          });
+      } else {
+        // POST request a new number to the backend
+        phonebookServices
+          .create({ name: newName, number: newNumber, id: Date.now() })
+          .then((newEntry) => setPersons(persons.concat(newEntry)));
+      }
       setNewName("");
       setNewNumber("");
     }
