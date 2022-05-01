@@ -13,7 +13,9 @@ const App = () => {
 
   // Get all phone numbers from the server
   useEffect(() => {
-    phonebookServices.read().then((allNumbers) => setPersons(allNumbers));
+    phonebookServices.read().then((allNumbers) => {
+      setPersons(allNumbers);
+    });
   }, []);
 
   return (
