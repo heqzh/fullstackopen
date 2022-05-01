@@ -60,7 +60,7 @@ export const PersonForm = ({ persons, setPersons, setNotification }) => {
       } else {
         // POST request the new person's entry to the backend
         phonebookServices
-          .create({ name: newName, number: newNumber, id: Date.now() })
+          .create({ name: newName, number: newNumber })
           .then((newEntry) => {
             setPersons(persons.concat(newEntry));
             showNotification(`Added ${newEntry.name}`, true);
