@@ -64,6 +64,9 @@ export const PersonForm = ({ persons, setPersons, setNotification }) => {
           .then((newEntry) => {
             setPersons(persons.concat(newEntry));
             showNotification(`Added ${newEntry.name}`, true);
+          })
+          .catch((error) => {
+            showNotification(error.response.data.message, false);
           });
       }
       setNewName("");
